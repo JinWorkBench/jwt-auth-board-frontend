@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { validateEmail, validateName } from "@/utils/validate";
 
 export default function SignupForm() {
   // 폼 입력 필드 상태 관리
@@ -25,7 +26,17 @@ export default function SignupForm() {
     setPasswordErrors([]);
     setConfirmPasswordError("");
 
-    // TODO: 검증 함수 호출
+    // 이메일 검증
+    const emailError = validateEmail(username);
+    if (emailError) {
+      setUsernameError(emailError);
+    }
+
+    // 이름 검증
+    const nameValidationError = validateName(name);
+    if (nameValidationError) {
+      setNameError(nameValidationError);
+    }
   };
   return (
     <form onSubmit={handleSubmit}>
