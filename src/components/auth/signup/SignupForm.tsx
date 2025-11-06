@@ -1,8 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 export default function SignupForm() {
+
+	// 폼 입력 필드 상태 관리
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   return (
     <form>
       <label htmlFor="username" className="block mb-1 font-semibold">
@@ -12,6 +19,8 @@ export default function SignupForm() {
         type="email"
         id="username"
         name="username"
+				value={username}
+				onChange={(e) => setUsername(e.target.value)}
         placeholder="example@email.com"
         className="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
@@ -23,6 +32,8 @@ export default function SignupForm() {
         type="text"
         id="name"
         name="name"
+				value={name}
+        onChange={(e) => setName(e.target.value)}
         placeholder="홍길동"
         className="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
@@ -34,6 +45,8 @@ export default function SignupForm() {
         type="password"
         id="password"
         name="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         placeholder="비밀번호를 입력하세요"
         className="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
@@ -45,6 +58,8 @@ export default function SignupForm() {
         type="password"
         id="confirmPassword"
         name="confirmPassword"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
         placeholder="비밀번호를 다시 입력하세요"
         className="w-full border border-gray-300 rounded px-3 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
