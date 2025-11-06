@@ -1,12 +1,18 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   validateEmail,
   validateName,
   validatePasswordAll,
   validateConfirmPassword,
 } from "@/utils/validate";
+import { signupAPI } from "@/lib/api/auth";
 
 export const useSignupForm = () => {
+  const router = useRouter();
+
   // 폼 입력 필드 상태 관리
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
@@ -19,8 +25,12 @@ export const useSignupForm = () => {
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]); // 여러 에러 동시 표시
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
+  // API 호출 상태 관리
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+
   // 폼 제출 핸들러
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // 모든 에러 초기화
@@ -28,6 +38,7 @@ export const useSignupForm = () => {
     setNameError("");
     setPasswordErrors([]);
     setConfirmPasswordError("");
+    setApiError("");
 
     // 이메일 검증
     const emailError = validateEmail(username);
@@ -54,6 +65,20 @@ export const useSignupForm = () => {
         setConfirmPasswordError(confirmPwError);
       }
     }
+
+    // API 호출
+    setIsLoading(true);
+    const response = await signupAPI(username, name, password, confirmPassword);
+    setIsLoading(false);
+
+    if (response.success) {
+      // 성공 시 로그인 페이지 이동
+      router.replace("/signin");
+    } else {
+      // 실패 시 에러 메시지 표시
+      setApiError(response.error || "회원가입에 실패했습니다.");
+      console.log("회원가입 실패:", response.error);
+    }
   };
 
   return {
@@ -69,6 +94,8 @@ export const useSignupForm = () => {
     nameError,
     passwordErrors,
     confirmPasswordError,
+    isLoading,
+    apiError,
     handleSubmit,
   };
 };
