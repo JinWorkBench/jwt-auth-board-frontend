@@ -8,8 +8,21 @@ export default function SigninForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  // 폼 입력 필드 에러 상태
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  // 폼 제출 핸들러
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // 모든 에러 초기화
+    setUsernameError("");
+    setPasswordError("");
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <label htmlFor="username" className="block mb-1 font-semibold">
         이메일
       </label>
@@ -22,6 +35,9 @@ export default function SigninForm() {
         placeholder="example@email.com"
         className="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
+      {usernameError && (
+        <p className="text-red-500 text-sm mb-4">{usernameError}</p>
+      )}
 
       <label htmlFor="password" className="block mb-1 font-semibold">
         비밀번호
@@ -35,6 +51,9 @@ export default function SigninForm() {
         placeholder="비밀번호를 입력하세요"
         className="w-full border border-gray-300 rounded px-3 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
+      {passwordError && (
+        <p className="text-red-500 text-sm mb-4">{passwordError}</p>
+      )}
 
       <div className="mb-6 text-center">
         <p className="text-gray-600 text-sm">
