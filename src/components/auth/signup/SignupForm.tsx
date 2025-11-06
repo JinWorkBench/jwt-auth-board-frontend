@@ -17,11 +17,18 @@ export default function SignupForm() {
     nameError,
     passwordErrors,
     confirmPasswordError,
+    isLoading,
+    apiError,
     handleSubmit,
   } = useSignupForm();
 
   return (
     <form onSubmit={handleSubmit}>
+      {apiError && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded text-red-700 text-sm">
+          {apiError}
+        </div>
+      )}
       <label htmlFor="username" className="block mb-1 font-semibold">
         이메일
       </label>
@@ -92,9 +99,14 @@ export default function SignupForm() {
 
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+        disabled={isLoading}
+        className={`w-full text-white py-2 rounded transition ${
+          isLoading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800"
+        }`}
       >
-        회원가입
+        {isLoading ? "처리 중..." : "회원가입"}
       </button>
     </form>
   );
