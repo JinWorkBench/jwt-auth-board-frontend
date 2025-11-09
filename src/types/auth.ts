@@ -9,3 +9,19 @@ export interface User {
   username: string;
   name: string;
 }
+
+// Zustand 스토어 전체 타입
+export interface AuthStore {
+  // 상태
+  user: User | null;
+  accessToken: string | null;
+  refreshToken: string | null;
+
+  // 함수들
+  setTokens: (accessToken: string, refreshToken: string, user?: User) => void;
+  logout: () => void;
+  hydrate: () => void;
+  setUser: (user: User) => void;
+  clearError: () => void;
+  refreshAccessToken: () => Promise<void>;
+}
