@@ -20,8 +20,5 @@ export interface AuthStore {
   // 함수들
   setTokens: (accessToken: string, refreshToken: string, user?: User) => void;
   logout: () => void;
-  hydrate: () => void;
-  setUser: (user: User) => void;
-  clearError: () => void;
   refreshAccessToken: () => Promise<void>;
 }

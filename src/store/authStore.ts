@@ -4,8 +4,6 @@ import {
   saveAccessToken,
   saveRefreshToken,
   clearAuthStorage,
-  getAccessToken,
-  getRefreshToken,
 } from "@/utils/storage";
 import { refreshTokenAPI } from "@/lib/api/token";
 
@@ -40,9 +38,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       refreshToken: null,
     });
   },
-  hydrate: () => {},
-  setUser: (user: User) => {},
-  clearError: () => {},
 
   // 액세스 토큰 갱신
   refreshAccessToken: async () => {
