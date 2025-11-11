@@ -3,32 +3,39 @@
 import { useCallback, useEffect, useState } from "react";
 import { getBoardsAPI } from "@/lib/api/board";
 import { useWaitForToken } from "@/hooks/useWaitForToken";
+import { useHandleAuthError } from "@/hooks/useHandleAuthError";
 import type { BoardsPageResponse } from "@/types/board";
 
 export default function BoardList() {
   const [boardsData, setBoardsData] = useState<BoardsPageResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(0);
 
   const waitForToken = useWaitForToken();
+  const withAuthError = useHandleAuthError();
 
   // API 호출
-  const fetchBoards = useCallback(async (page: number) => {
-    setIsLoading(true);
-    setError(null);
+  const fetchBoards = useCallback(
+    async (page: number) => {
+      setIsLoading(true);
+      setError(null);
 
-    const response = await getBoardsAPI(page, 10);
+      const response = await withAuthError(() => getBoardsAPI(page, 10));
 
-    if (response.success && response.data) {
-      setBoardsData(response.data);
-      setCurrentPage(page);
-    } else {
-      setError(response.error || "게시글 조회 실패");
-    }
+      if (!response || !response.success) {
+        setError(response?.error || "게시글 조회 실패");
+        setIsLoading(false);
+        return;
+      }
 
-    setIsLoading(false);
-  }, []);
+      if (response.data) {
+        setBoardsData(response.data);
+      }
+
+      setIsLoading(false);
+    },
+    [withAuthError],
+  );
 
   // 초기 데이터 로드
   useEffect(() => {
