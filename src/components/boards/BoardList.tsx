@@ -2,14 +2,16 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { getBoardsAPI } from "@/lib/api/board";
+import { useWaitForToken } from "@/hooks/useWaitForToken";
 import type { BoardsPageResponse } from "@/types/board";
-import { useAuthStore } from "@/store/authStore";
 
 export default function BoardList() {
   const [boardsData, setBoardsData] = useState<BoardsPageResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
+
+  const waitForToken = useWaitForToken();
 
   // API 호출
   const fetchBoards = useCallback(async (page: number) => {
@@ -31,24 +33,18 @@ export default function BoardList() {
   // 초기 데이터 로드
   useEffect(() => {
     (async () => {
-      const accessToken = useAuthStore.getState().accessToken;
+      // 토큰 준비 대기
+      const isTokenReady = await waitForToken();
 
-      if (!accessToken) {
-        console.log("토큰 준비 중...");
-
-        // 토큰이 있을 때까지 반복 확인
-        let retries = 0;
-        while (!useAuthStore.getState().accessToken && retries < 10) {
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          retries++;
-        }
-
-        console.log("토큰 준비 완료");
+      if (!isTokenReady) {
+        setError("토큰 준비 실패. 다시 로그인해주세요.");
+        setIsLoading(false);
+        return;
       }
 
       await fetchBoards(0);
     })();
-  }, [fetchBoards]);
+  }, [waitForToken, fetchBoards]);
 
   // 로딩 상태
   if (isLoading) {
