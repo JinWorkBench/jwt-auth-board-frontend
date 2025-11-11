@@ -34,6 +34,28 @@ export default function BoardList() {
     })();
   }, [fetchBoards]);
 
+  // 로딩 상태
+  if (isLoading) {
+    return (
+      <div className="text-center py-8 text-gray-600">
+        <p>로딩 중...</p>
+      </div>
+    );
+  }
+
+  // 에러 상태
+  if (error) {
+    return (
+      <div className="text-center py-8 text-red-500">
+        <p>에러 발생</p>
+        <p className="text-sm mt-2">{error}</p>
+      </div>
+    );
+  }
+
+  // 게시판 데이터 추출과 빈 배열 확인
+  const boards = boardsData?.content || [];
+
   return (
     <div>
       <p>게시판 리스트</p>
