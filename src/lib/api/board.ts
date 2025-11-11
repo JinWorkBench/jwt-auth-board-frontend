@@ -2,13 +2,13 @@
 
 import { useAuthStore } from "@/store/authStore";
 import type { ApiResponse } from "@/types/api";
-import type { BoardItem } from "@/types/board";
+import type { BoardsPageResponse } from "@/types/board";
 
 // 글 목록 조회 API 호출
 export const getBoardsAPI = async (
   page: number,
   size: number,
-): Promise<ApiResponse<BoardItem[]>> => {
+): Promise<ApiResponse<BoardsPageResponse>> => {
   try {
     // Zustand에서 토큰 가져오기
     const accessToken = useAuthStore.getState().accessToken;
@@ -48,7 +48,7 @@ export const getBoardsAPI = async (
     return {
       success: true,
       message: "글 목록 조회 성공",
-      data: boardItems as BoardItem[],
+      data: boardItems as BoardsPageResponse,
     };
   } catch (error) {
     const errorMessage =

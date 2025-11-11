@@ -7,11 +7,19 @@ export interface CategoryMap {
 }
 
 // 글 목록 조회 응답
-export interface BoardItem {
+export interface BoardListItem {
   id: number;
   title: string;
   category: BoardCategory;
   createdAt: string;
+}
+
+// 글 목록 페이지네이션 응답
+export interface BoardsPageResponse {
+  content: BoardListItem[];
+  totalPages: number;
+  totalElements: number;
+  number: number;
 }
 
 // 글 상세 조회 응답
