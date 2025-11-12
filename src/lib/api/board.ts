@@ -167,7 +167,7 @@ export const createBoardAPI = async (
     // multipart/form-data 생성
     const formData = new FormData();
     formData.append("request", JSON.stringify({ title, content, category }));
-    
+
     if (file) {
       formData.append("file", file);
     }
@@ -194,6 +194,108 @@ export const createBoardAPI = async (
       success: true,
       message: "게시글 생성 성공",
       data: data as BoardDetail,
+    };
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "알 수 없는 오류";
+    return {
+      success: false,
+      error: errorMessage,
+    };
+  }
+};
+
+// 게시글 수정 API 호출
+export const updateBoardAPI = async (
+  id: number,
+  title: string,
+  content: string,
+  category: string,
+  file?: File,
+): Promise<ApiResponse<void>> => {
+  try {
+    const accessToken = useAuthStore.getState().accessToken;
+
+    if (!accessToken) {
+      return {
+        success: false,
+        error: "액세스 토큰이 없습니다.",
+      };
+    }
+
+    const formData = new FormData();
+    formData.append("request", JSON.stringify({ title, content, category }));
+
+    if (file) {
+      formData.append("file", file);
+    }
+
+    const response = await fetch(`/api/boards/${id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || "게시글 수정 실패",
+        status: response.status,
+      };
+    }
+
+    return {
+      success: true,
+      message: "게시글 수정 성공",
+    };
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "알 수 없는 오류";
+    return {
+      success: false,
+      error: errorMessage,
+    };
+  }
+};
+
+// 게시글 삭제 API 호출
+export const deleteBoardAPI = async (
+  id: number,
+): Promise<ApiResponse<void>> => {
+  try {
+    const accessToken = useAuthStore.getState().accessToken;
+
+    if (!accessToken) {
+      return {
+        success: false,
+        error: "액세스 토큰이 없습니다.",
+      };
+    }
+
+    const response = await fetch(`/api/boards/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || "게시글 삭제 실패",
+        status: response.status,
+      };
+    }
+
+    return {
+      success: true,
+      message: "게시글 삭제 성공",
     };
   } catch (error) {
     const errorMessage =
