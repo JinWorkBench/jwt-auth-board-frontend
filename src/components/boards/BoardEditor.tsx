@@ -38,7 +38,8 @@ export default function BoardEditor({ searchParams }: BoardEditorProps) {
   );
   const [file, setFile] = useState<File | null>(null);
   const [formError, setFormError] = useState("");
-
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (initialData) {
       setTitle(initialData.title);
