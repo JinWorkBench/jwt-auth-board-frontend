@@ -6,6 +6,8 @@ import {
   getAccessToken,
   getRefreshToken,
   clearAuthStorage,
+  saveUser,
+  getUser,
 } from "@/utils/storage";
 import { refreshTokenAPI } from "@/lib/api/token";
 
@@ -34,6 +36,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     saveAccessToken(accessToken);
     saveRefreshToken(refreshToken);
 
+    // user 정보 저장
+    if (user) {
+      saveUser({ username: user.username, name: user.name });
+    }
+
     // Zustand 스토어 상태 업데이트
     set({
       accessToken,
@@ -50,15 +57,19 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     // localStorage에서 Mock 모드 상태 복원
     const savedMockMode = localStorage.getItem(MOCK_MODE_KEY);
     const useMockData = savedMockMode ? JSON.parse(savedMockMode) : false;
+    
+    // user 정보 복원
+    const savedUser = getUser();
 
     console.log("토큰 복원 여부");
     console.log("accessToken:", accessToken);
     console.log("refreshToken:", refreshToken);
     console.log("useMockData:", useMockData);
+    console.log("user:", savedUser);
 
     // 둘 다 있으면 Zustand에 저장
     if (accessToken && refreshToken) {
-      set({ accessToken, refreshToken, useMockData });
+      set({ accessToken, refreshToken, user: savedUser, useMockData });
       console.log("토큰 복원 완료");
     } else {
       set({ useMockData });
