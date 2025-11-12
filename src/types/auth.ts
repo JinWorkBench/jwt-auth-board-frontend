@@ -16,6 +16,8 @@ export interface AuthStore {
   user: User | null;
   accessToken: string | null;
   refreshToken: string | null;
+  useMockData: boolean;
+  toggleMockMode: () => void;
 
   // 함수들
   setTokens: (accessToken: string, refreshToken: string, user?: User) => void;

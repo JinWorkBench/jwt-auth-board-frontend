@@ -9,10 +9,24 @@ import {
 } from "@/utils/storage";
 import { refreshTokenAPI } from "@/lib/api/token";
 
+// Mock 상태 저장 키
+const MOCK_MODE_KEY = "app:mock-mode";
+
 export const useAuthStore = create<AuthStore>((set, get) => ({
   user: null,
   accessToken: null,
   refreshToken: null,
+
+  // Mock 데이터 모드 토글 상태
+  useMockData: false,
+
+  // Mock 모드 토글 함수
+  toggleMockMode: () => {
+    const newMockMode = !get().useMockData;
+    localStorage.setItem(MOCK_MODE_KEY, JSON.stringify(newMockMode));
+    set({ useMockData: newMockMode });
+    console.log(`Mock mode: ${newMockMode ? "ON" : "OFF"}`);
+  },
 
   // 토큰 저장
   setTokens: (accessToken: string, refreshToken: string, user?: User) => {
@@ -33,9 +47,14 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     const accessToken = getAccessToken();
     const refreshToken = getRefreshToken();
 
+    // localStorage에서 Mock 모드 상태 복원
+    const savedMockMode = localStorage.getItem(MOCK_MODE_KEY);
+    const useMockData = savedMockMode ? JSON.parse(savedMockMode) : false;
+
     console.log("토큰 복원 여부");
     console.log("accessToken:", accessToken);
     console.log("refreshToken:", refreshToken);
+    console.log("useMockData:", useMockData);
 
     // 둘 다 있으면 Zustand에 저장
     if (accessToken && refreshToken) {
@@ -58,6 +77,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       user: null,
       accessToken: null,
       refreshToken: null,
+      useMockData: false,
     });
   },
 
