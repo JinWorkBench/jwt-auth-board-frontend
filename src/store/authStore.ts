@@ -58,12 +58,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
     // 둘 다 있으면 Zustand에 저장
     if (accessToken && refreshToken) {
-      set({
-        accessToken,
-        refreshToken,
-      });
+      set({ accessToken, refreshToken, useMockData });
       console.log("토큰 복원 완료");
-      return;
+    } else {
+      set({ useMockData });
     }
   },
 
