@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCreateBoard } from "@/hooks/useCreateBoard";
 import { useUpdateBoard } from "@/hooks/useUpdateBoard";
 import { useEditorBoard } from "@/hooks/useEditorBoard";
@@ -35,6 +35,14 @@ export default function BoardEditor() {
   const [file, setFile] = useState<File | null>(null);
   const [formError, setFormError] = useState("");
 
+  useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title);
+      setContent(initialData.content);
+      setCategory(initialData.boardCategory);
+    }
+  }, [initialData]);
+  
   const isLoading = isDataLoading || isCreating || isUpdating;
 
   // 제출 핸들러
