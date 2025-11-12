@@ -54,6 +54,32 @@ export default function CreateBoardForm() {
     await createBoard(title, content, category, file || undefined);
   };
 
+  // 파일 선택 핸들러
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+
+    if (selectedFile) {
+      // 파일 크기 확인 (5MB 이하)
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        setFormError("파일 크기는 5MB 이하여야 합니다.");
+        setFile(null);
+        e.target.value = "";
+        return;
+      }
+
+      // 이미지 파일 확인
+      if (!selectedFile.type.startsWith("image/")) {
+        setFormError("이미지 파일만 업로드 가능합니다.");
+        setFile(null);
+        e.target.value = "";
+        return;
+      }
+
+      setFile(selectedFile);
+      setFormError("");
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-4">
       {/* 헤더 */}
@@ -123,9 +149,13 @@ export default function CreateBoardForm() {
           <input
             type="file"
             accept="image/*"
+            onChange={handleFileChange}
             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
             disabled={isLoading}
           />
+          <p className="text-xs text-gray-500 mt-1">
+            {file ? `선택됨: ${file.name}` : "5MB 이하의 이미지만 가능"}
+          </p>
         </div>
 
         {/* 버튼 */}
