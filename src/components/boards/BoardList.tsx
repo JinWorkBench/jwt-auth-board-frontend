@@ -1,9 +1,11 @@
 "use client";
 
 import BoardCard from "./BoardCard";
+import { useRouter } from "next/navigation";
 import { useBoardList } from "@/hooks/useBoardList";
 
 export default function BoardList() {
+  const router = useRouter();
   const { boardsData, isLoading, error, currentPage, handlePageChange } =
     useBoardList();
 
@@ -37,6 +39,16 @@ export default function BoardList() {
 
   return (
     <div>
+      {/* 생성 버튼 */}
+      <div className="mb-6 flex justify-end">
+        <button
+          onClick={() => router.push('/boards/create')}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          + 새 게시글
+        </button>
+      </div>
+
       {/* 게시글 목록 */}
       <div className="space-y-4">
         {boards.map((board) => (
