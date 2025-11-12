@@ -14,7 +14,11 @@ const CATEGORIES: { value: BoardCategory; label: string }[] = [
   { value: "ETC", label: "기타" },
 ];
 
-export default function BoardEditor() {
+interface BoardEditorProps {
+  searchParams: Promise<{ postId?: string }>;
+}
+
+export default function BoardEditor({ searchParams }: BoardEditorProps) {
   const router = useRouter();
   const {
     mode,
@@ -22,7 +26,7 @@ export default function BoardEditor() {
     initialData,
     isLoading: isDataLoading,
     error: dataError,
-  } = useEditorBoard();
+  } = useEditorBoard(searchParams);
 
   const { createBoard, isLoading: isCreating } = useCreateBoard();
   const { updateBoard, isLoading: isUpdating } = useUpdateBoard();
@@ -42,7 +46,7 @@ export default function BoardEditor() {
       setCategory(initialData.boardCategory);
     }
   }, [initialData]);
-  
+
   const isLoading = isDataLoading || isCreating || isUpdating;
 
   // 제출 핸들러
@@ -193,9 +197,7 @@ export default function BoardEditor() {
 
         {/* 이미지 */}
         <div>
-          <label className="block text-sm font-medium mb-2">
-            이미지
-          </label>
+          <label className="block text-sm font-medium mb-2">이미지</label>
           <input
             type="file"
             accept="image/*"

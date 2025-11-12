@@ -1,14 +1,13 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { getBoardDetailAPI } from "@/lib/api/board";
 import { useHandleAuthError } from "@/hooks/useHandleAuthError";
 import type { BoardDetail } from "@/types/board";
 
-export const useEditorBoard = () => {
-  const searchParams = useSearchParams();
-  const postId = searchParams.get("postId");
+export const useEditorBoard = (searchParams: Promise<{ postId?: string }>) => {
+  const params = use(searchParams);
+  const postId = params.postId;
 
   const [initialData, setInitialData] = useState<BoardDetail | null>(null);
   const [isLoading, setIsLoading] = useState(!!postId); // postId 있으면 로딩
