@@ -40,13 +40,7 @@ export default function BoardList() {
       {/* 게시글 목록 */}
       <div className="space-y-4">
         {boards.map((board) => (
-          <BoardCard
-            key={board.id}
-            board={board}
-            onClick={(boardId) => {
-              console.log(`게시글 ${boardId} 클릭됨`);
-            }}
-          />
+          <BoardCard key={board.id} board={board} />
         ))}
       </div>
 

@@ -1,16 +1,23 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import type { BoardListItem } from "@/types/board";
 
 interface BoardCardProps {
   board: BoardListItem;
-  onClick?: (boardId: number) => void;
 }
 
-export default function BoardCard({ board, onClick }: BoardCardProps) {
+export default function BoardCard({ board }: BoardCardProps) {
+  const router = useRouter();
+
+  // 클릭 시 상세 페이지로 이동
+  const handleClick = () => {
+    router.push(`/boards/${board.id}`);
+  };
+
   return (
     <div
-      onClick={() => onClick?.(board.id)}
+      onClick={handleClick}
       className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition"
     >
       {/* 제목 */}
