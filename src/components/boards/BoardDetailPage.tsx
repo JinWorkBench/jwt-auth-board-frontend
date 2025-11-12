@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getBoardDetailAPI } from "@/lib/api/board";
 import { useHandleAuthError } from "@/hooks/useHandleAuthError";
+import { useDeleteBoard } from "@/hooks/userDeleteBoard";
 import type { BoardDetail } from "@/types/board";
 
 interface BoardDetailPageProps {
@@ -17,6 +18,12 @@ export default function BoardDetailPage({ boardId }: BoardDetailPageProps) {
 
   const router = useRouter();
   const withAuthError = useHandleAuthError();
+  const {
+    deleteBoard,
+    isLoading: isDeleting,
+    showConfirm,
+    setShowConfirm,
+  } = useDeleteBoard();
 
   useEffect(() => {
     (async () => {
@@ -77,8 +84,12 @@ export default function BoardDetailPage({ boardId }: BoardDetailPageProps) {
           >
             수정
           </button>
-          <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-            삭제
+          <button
+            onClick={() => setShowConfirm(true)}
+            disabled={isDeleting}
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            {isDeleting ? "삭제 중..." : "삭제"}
           </button>
         </div>
       </div>
@@ -106,6 +117,35 @@ export default function BoardDetailPage({ boardId }: BoardDetailPageProps) {
       >
         목록으로
       </button>
+
+      {/* 삭제 확인 모달 */}
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm">
+            <h2 className="text-lg font-bold mb-4">게시글 삭제</h2>
+            <p className="text-gray-600 mb-6">
+              정말로 이 게시글을 삭제하시겠습니까?
+            </p>
+
+            <div className="flex gap-2">
+              <button
+                onClick={() => deleteBoard(boardId)}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:bg-gray-400"
+              >
+                {isDeleting ? "삭제 중..." : "삭제"}
+              </button>
+              <button
+                onClick={() => setShowConfirm(false)}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 border rounded hover:bg-gray-50 disabled:bg-gray-200"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
