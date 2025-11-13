@@ -56,15 +56,17 @@ export async function POST(request: NextRequest) {
 
     console.log(`게시글 생성 API`);
 
-    // multipart/form-data 처리
-    const formData = await request.formData();
+    const contentType = request.headers.get("content-type") ?? undefined;
+
+    const body = await request.arrayBuffer();
 
     const res = await fetch(`${API_BASE_URL}/boards`, {
       method: "POST",
       headers: {
+        ...(contentType ? { "Content-Type": contentType } : {}),
         Authorization: authHeader,
       },
-      body: formData,
+      body,
     });
 
     const data = await res.json().catch(() => ({}));
