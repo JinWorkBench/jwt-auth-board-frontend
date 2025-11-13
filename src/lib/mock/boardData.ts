@@ -98,5 +98,6 @@ export const getMockBoardsData = (
     totalPages,
     totalElements,
     number: page,
+    size,
   };
 };
