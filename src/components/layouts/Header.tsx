@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
-import ModeSwitch from "@/components/common/ModeSwitch";
 
 export default function Header() {
   const router = useRouter();
@@ -62,9 +61,6 @@ export default function Header() {
           {/* 우측: 사용자 정보 + 토글 + 로그아웃 */}
           <div className="flex-shrink-0">
             <div className="flex items-center gap-6">
-              {/* API 모드 토글 */}
-              <ModeSwitch />
-
               {/* 사용자 정보 또는 로그인 버튼 */}
               {user ? (
                 <div className="flex items-center gap-4">

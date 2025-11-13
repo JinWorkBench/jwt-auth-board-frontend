@@ -2,6 +2,7 @@
 
 import { useEffect, ReactNode } from "react";
 import { useAuthStore } from "@/store/authStore";
+import ModeSwitch from "@/components/common/ModeSwitch";
 
 export default function RootLayoutClient({
   children,
@@ -14,5 +15,12 @@ export default function RootLayoutClient({
     initializeFromStorage();
   }, []);
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <div className="fixed bottom-4 right-4 z-50">
+        <ModeSwitch />
+      </div>
+    </>
+  );
 }
