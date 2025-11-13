@@ -14,7 +14,7 @@ export const getBoardsAPI = async (
   try {
     // Zustand에서 읽기
     const useMockData = useAuthStore.getState().useMockData;
-    
+
     // Mock 모드
     if (useMockData) {
       console.log(`Mock 데이터 사용 중 (page: ${page}, size: ${size})...`);
@@ -162,7 +162,7 @@ export const createBoardAPI = async (
     if (useMockData) {
       return {
         success: false,
-        error: 'Mock 모드에서는 게시글을 작성할 수 없습니다.',
+        error: "Mock 모드에서는 게시글을 작성할 수 없습니다.",
       };
     }
 
@@ -177,7 +177,17 @@ export const createBoardAPI = async (
 
     // multipart/form-data 생성
     const formData = new FormData();
-    formData.append("request", JSON.stringify({ title, content, category }));
+
+    const requestPayload = {
+      title,
+      content,
+      category,
+    };
+
+    formData.append(
+      "request",
+      new Blob([JSON.stringify(requestPayload)], { type: "application/json" }),
+    );
 
     if (file) {
       formData.append("file", file);
@@ -230,7 +240,7 @@ export const updateBoardAPI = async (
     if (useMockData) {
       return {
         success: false,
-        error: 'Mock 모드에서는 게시글을 수정할 수 없습니다.',
+        error: "Mock 모드에서는 게시글을 수정할 수 없습니다.",
       };
     }
 
