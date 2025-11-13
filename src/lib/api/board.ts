@@ -63,12 +63,18 @@ export const getBoardsAPI = async (
       };
     }
 
-    const boardItems = data.content || [];
+    const pageData: BoardsPageResponse = {
+      content: data.content,
+      totalPages: data.totalPages,
+      totalElements: data.totalElements,
+      number: data.number,
+      size: data.size,
+    };
 
     return {
       success: true,
       message: "글 목록 조회 성공",
-      data: boardItems as BoardsPageResponse,
+      data: pageData,
     };
   } catch (error) {
     const errorMessage =

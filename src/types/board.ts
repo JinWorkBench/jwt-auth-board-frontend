@@ -20,6 +20,7 @@ export interface BoardsPageResponse {
   totalPages: number;
   totalElements: number;
   number: number;
+  size: number;
 }
 
 // 글 상세 조회 응답
