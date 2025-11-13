@@ -33,7 +33,17 @@ export default function BoardList() {
 
   if (boards.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">게시글이 없습니다.</div>
+      <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+        <p className="mb-4">
+          아직 등록된 게시글이 없습니다. 첫 번째 게시글을 작성해보세요!
+        </p>
+        <button
+          onClick={() => router.push("/boards/editor")}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+        >
+          새 게시글 작성하러 가기
+        </button>
+      </div>
     );
   }
 
