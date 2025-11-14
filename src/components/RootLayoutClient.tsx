@@ -18,8 +18,10 @@ export default function RootLayoutClient({
   return (
     <>
       {children}
-      <div className="fixed bottom-4 right-4 z-50">
-        <ModeSwitch />
+      <div className="relative max-w-7xl mx-auto">
+        <div className="absolute bottom-4 right-4 z-50">
+          <ModeSwitch />
+        </div>
       </div>
     </>
   );
