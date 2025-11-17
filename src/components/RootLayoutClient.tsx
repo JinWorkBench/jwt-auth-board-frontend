@@ -3,6 +3,7 @@
 import { useEffect, ReactNode } from "react";
 import { useAuthStore } from "@/store/authStore";
 import ModeSwitch from "@/components/common/ModeSwitch";
+import Sidebar from "@/components/layouts/Sidebar";
 
 export default function RootLayoutClient({
   children,
@@ -17,6 +18,7 @@ export default function RootLayoutClient({
 
   return (
     <>
+      <Sidebar />
       {children}
       <div className="relative max-w-7xl mx-auto">
         <div className="absolute bottom-4 right-4 z-50">
