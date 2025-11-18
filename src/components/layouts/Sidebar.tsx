@@ -44,6 +44,17 @@ export default function Sidebar() {
           </li>
         </ul>
       </nav>
+
+      {/* 로그인/로그아웃 버튼 */}
+      <div className="border-t border-gray-200 p-6">
+        <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+          로그인
+        </button>
+
+        <button className="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition mt-2">
+          로그아웃
+        </button>
+      </div>
     </aside>
   );
 }
