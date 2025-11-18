@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { useSidebarStore } from "@/store/sidebarStore";
+import { useAuthStore } from "@/store/authStore";
 
 export default function Sidebar() {
   const { isOpen, closeSidebar } = useSidebarStore();
+  const user = useAuthStore((state) => state.user);
 
   return (
     <aside
@@ -47,13 +49,15 @@ export default function Sidebar() {
 
       {/* 로그인/로그아웃 버튼 */}
       <div className="border-t border-gray-200 p-6">
-        <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-          로그인
-        </button>
-
-        <button className="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition mt-2">
-          로그아웃
-        </button>
+        {user ? (
+          <button className="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition mt-2">
+            로그아웃
+          </button>
+        ) : (
+          <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            로그인
+          </button>
+        )}
       </div>
     </aside>
   );
