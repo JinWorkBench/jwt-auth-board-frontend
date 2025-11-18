@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSidebarStore } from "@/store/sidebarStore";
 
 export default function Sidebar() {
-  const { isOpen } = useSidebarStore();
+  const { isOpen, closeSidebar } = useSidebarStore();
 
   return (
     <aside
@@ -19,6 +19,7 @@ export default function Sidebar() {
             <Link
               href="/about"
               className="text-gray-700 font-medium hover:text-blue-600 transition"
+              onClick={closeSidebar}
             >
               소개
             </Link>
@@ -27,6 +28,7 @@ export default function Sidebar() {
             <Link
               href="/boards"
               className="text-gray-700 font-medium hover:text-blue-600 transition"
+              onClick={closeSidebar}
             >
               게시판
             </Link>
@@ -35,6 +37,7 @@ export default function Sidebar() {
             <Link
               href="/features"
               className="text-gray-700 font-medium hover:text-blue-600 transition"
+              onClick={closeSidebar}
             >
               기능
             </Link>
