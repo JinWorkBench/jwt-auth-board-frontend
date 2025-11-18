@@ -57,15 +57,19 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      {/* 로그인/로그아웃 버튼 */}
+      {/* 로그인 조건부 렌더링 */}
       <div className="border-t border-gray-200 p-6">
         {user ? (
-          <button
-            onClick={handleLogout}
-            className="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition mt-2"
-          >
-            로그아웃
-          </button>
+          <>
+            {/* 사용자명 표시 */}
+            <p className="text-sm text-gray-600 mb-4">{user.username}님</p>
+            <button
+              onClick={handleLogout}
+              className="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition mt-2"
+            >
+              로그아웃
+            </button>
+          </>
         ) : (
           <Link
             href="/signin"
