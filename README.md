@@ -1,4 +1,4 @@
-# 🏢 BIGS Payments - 게시판
+# 🏢 JWT Authenticated Board - 게시판
 
 > 사용자 인증과 CRUD 게시판 기능을 갖춘 게시판 
 ---
