@@ -105,5 +105,5 @@ Next.js route.ts를 통한 API 프록시 패턴으로 백엔드 API 엔드포인
 ---
 
 ### 💬 배포
-[배포 링크 바로가기 (vercel)](https://bigs-payments-frontend.vercel.app/)
+[배포 링크 바로가기 (vercel)](https://jwt-auth-board-frontend.vercel.app/)
 
