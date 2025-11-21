@@ -2,27 +2,10 @@
 
 import Link from "next/link";
 import ModeSwitch from "@/components/common/ModeSwitch";
+import WelcomeMessage from "@/components/common/WelcomeMessage";
 import { useSidebarStore } from "@/store/sidebarStore";
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
-
-// 환영 메세지 배열
-const LOGIN_MESSAGES = [
-  "오늘 하루 어떠세요?",
-  "환영합니다!",
-  "좋은 하루 되세요!",
-  "오늘도 화이팅!",
-];
-
-// 게스트 메세지 배열
-const GUEST_MESSAGES = ["로그인이 필요합니다.", "회원가입하고 시작해보세요!"];
-
-// 랜덤 메세지 선택 함수
-const getRandomMessage = (messages: string[]) => {
-  const randomIndex = Math.floor(Math.random() * messages.length);
-  return messages[randomIndex];
-};
 
 export default function Sidebar() {
   const { isOpen, closeSidebar } = useSidebarStore();
@@ -36,13 +19,6 @@ export default function Sidebar() {
     closeSidebar();
     router.push("/");
   };
-
-  // 메세지 조건부 렌더링
-  const welcomeMessage = useMemo(() => {
-    return user
-      ? getRandomMessage(LOGIN_MESSAGES)
-      : getRandomMessage(GUEST_MESSAGES);
-  }, [user]);
 
   return (
     <>
@@ -68,7 +44,9 @@ export default function Sidebar() {
                 {user ? `${user.name} 님 >` : "게스트 >"}
               </span>
             </div>
-            <p className="text-sm text-gray-500 mt-2">{welcomeMessage}</p>
+            <div className="mt-2">
+              <WelcomeMessage user={user} />
+            </div>
           </div>
 
           {/* 네비게이션 메뉴 */}
@@ -130,7 +108,7 @@ export default function Sidebar() {
         </div>
 
         {/* API/목업 모드 토글 */}
-        <div className="flex p-2 ml-2">
+        <div className="flex justify-center py-4 pl-4">
           <ModeSwitch />
         </div>
       </aside>
