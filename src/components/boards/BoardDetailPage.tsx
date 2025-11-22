@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getBoardDetailAPI } from "@/lib/api/board";
 import { useHandleAuthError } from "@/hooks/useHandleAuthError";
-import { useDeleteBoard } from "@/hooks/userDeleteBoard";
+import { useDeleteBoard } from "@/hooks/useDeleteBoard";
 import type { BoardDetail } from "@/types/board";
 
 interface BoardDetailPageProps {
