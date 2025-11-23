@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { addLikeAPI, removeLikeAPI } from "@/lib/api/board";
+import { useAuthStore } from "@/store/authStore";
 
 interface UseLikeBoardParams {
   boardId: number;
@@ -23,9 +24,17 @@ export const useLikeBoard = ({
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
 
+  // Mock 모드 확인
+  const useMockData = useAuthStore((state) => state.useMockData);
+
+  // 좋아요 여부, 개수 초기화
+  useEffect(() => {
+    setIsLiked(initialIsLiked);
+    setLikeCount(initialLikeCount);
+  }, [initialIsLiked, initialLikeCount]);
+
   // 좋아요 토글 함수
   const handleLikeToggle = useCallback(async () => {
-    
     // 이전 상태 저장 (롤백용)
     const prevIsLiked = isLiked;
     const prevLikeCount = likeCount;
@@ -33,6 +42,12 @@ export const useLikeBoard = ({
     // 즉시 UI 변경 (낙관적 업데이트)
     setIsLiked(!isLiked);
     setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+
+    // Mock 모드면 API 호출하지 않음
+    if (useMockData) {
+      console.log("Mock 모드 API 비호출");
+      return;
+    }
 
     // API 호출
     try {
@@ -47,7 +62,7 @@ export const useLikeBoard = ({
       setIsLiked(prevIsLiked);
       setLikeCount(prevLikeCount);
     }
-  }, [isLiked, likeCount, boardId]);
+  }, [isLiked, likeCount, boardId, useMockData]);
 
   return {
     isLiked,
