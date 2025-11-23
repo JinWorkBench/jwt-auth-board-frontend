@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useHandleAuthError } from "./useHandleAuthError";
+import { addLikeAPI, removeLikeAPI } from "@/lib/api/board";
 
 interface UseLikeBoardParams {
   boardId: number;
@@ -23,11 +23,32 @@ export const useLikeBoard = ({
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
 
-  const withAuthError = useHandleAuthError();
+  // 좋아요 토글 함수
+  const handleLikeToggle = useCallback(async () => {
+    
+    // 이전 상태 저장 (롤백용)
+    const prevIsLiked = isLiked;
+    const prevLikeCount = likeCount;
 
-  const handleLikeToggle = useCallback(() => {
-    console.log("좋아요 토글:", !isLiked);
-  }, [isLiked]);
+    // 즉시 UI 변경 (낙관적 업데이트)
+    setIsLiked(!isLiked);
+    setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+
+    // API 호출
+    try {
+      const apiFunction = isLiked ? removeLikeAPI : addLikeAPI;
+      const response = await apiFunction(boardId);
+
+      if (!response || !response.success) {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      console.error("좋아요 API 호출 실패:", error);
+      setIsLiked(prevIsLiked);
+      setLikeCount(prevLikeCount);
+    }
+  }, [isLiked, likeCount, boardId]);
+
   return {
     isLiked,
     likeCount,
