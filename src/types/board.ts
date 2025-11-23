@@ -12,6 +12,8 @@ export interface BoardListItem {
   title: string;
   category: BoardCategory;
   createdAt: string;
+  likeCount: number;
+  isLiked: boolean;
 }
 
 // 글 목록 페이지네이션 응답
@@ -31,4 +33,6 @@ export interface BoardDetail {
   boardCategory: BoardCategory;
   imageUrl?: string;
   createdAt: string;
+  likeCount: number;
+  isLiked: boolean;
 }
