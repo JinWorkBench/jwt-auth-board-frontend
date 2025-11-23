@@ -357,3 +357,71 @@ export const deleteBoardAPI = async (
     };
   }
 };
+
+// 게시글 좋아요 추가 API
+export const addLikeAPI = async (id: number): Promise<ApiResponse<void>> => {
+  try {
+    const accessToken = useAuthStore.getState().accessToken;
+
+    if (!accessToken) {
+      return { success: false, error: "로그인이 필요합니다." };
+    }
+
+    const response = await fetch(`/api/boards/${id}/like`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || "좋아요 추가에 실패했습니다.",
+        status: response.status,
+      };
+    }
+
+    return { success: true, message: "좋아요를 추가했습니다." };
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "알 수 없는 오류";
+    return { success: false, error: errorMessage };
+  }
+};
+
+// 게시글 좋아요 취소 API
+export const removeLikeAPI = async (id: number): Promise<ApiResponse<void>> => {
+  try {
+    const accessToken = useAuthStore.getState().accessToken;
+
+    if (!accessToken) {
+      return { success: false, error: "로그인이 필요합니다." };
+    }
+
+    const response = await fetch(`/api/boards/${id}/like`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || "좋아요 취소에 실패했습니다.",
+        status: response.status,
+      };
+    }
+
+    return { success: true, message: "좋아요를 취소했습니다." };
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "알 수 없는 오류";
+    return { success: false, error: errorMessage };
+  }
+};
