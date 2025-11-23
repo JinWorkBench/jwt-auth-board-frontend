@@ -1,6 +1,6 @@
 "use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getBoardDetailAPI } from "@/lib/api/board";
@@ -16,6 +16,10 @@ export default function BoardDetailPage({ boardId }: BoardDetailPageProps) {
   const [board, setBoard] = useState<BoardDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // 좋아요 낙관적 업데이트
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
   const router = useRouter();
   const withAuthError = useHandleAuthError();
@@ -37,9 +41,25 @@ export default function BoardDetailPage({ boardId }: BoardDetailPageProps) {
       }
 
       setBoard(response.data || null);
+
+      // 좋아요 초기값 설정
+      if (response.data) {
+        setIsLiked(response.data.isLiked);
+        setLikeCount(response.data.likeCount);
+      }
+
       setIsLoading(false);
     })();
   }, [boardId, withAuthError]);
+
+  // 좋아요 토글 핸들러
+  const handleLikeToggle = () => {
+    // 즉시 UI 변경
+    setIsLiked(!isLiked);
+    setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+
+    console.log("좋아요 토글:", !isLiked);
+  };
 
   if (isLoading) {
     return <div className="text-center py-8">로딩 중...</div>;
@@ -77,8 +97,26 @@ export default function BoardDetailPage({ boardId }: BoardDetailPageProps) {
           </div>
         </div>
 
-        {/* 수정/삭제 버튼 */}
         <div className="flex gap-2">
+          {/* 좋아요 버튼 */}
+          <button
+            onClick={handleLikeToggle}
+            className={`
+              flex items-center gap-2 px-4 py-2 rounded
+              transition-all duration-200
+              ${
+                isLiked
+                  ? "bg-red-50 text-red-600 border border-red-200 hover:bg-red-100"
+                  : "bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100"
+              }
+            `}
+            aria-label={isLiked ? "좋아요 취소" : "좋아요"}
+          >
+            <span className="text-xl">{isLiked ? "❤️" : "🤍"}</span>
+            <span className="font-medium">{likeCount}</span>
+          </button>
+
+          {/* 수정/삭제 버튼 */}
           <button
             onClick={() => router.push(`/boards/editor?postId=${boardId}`)}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
