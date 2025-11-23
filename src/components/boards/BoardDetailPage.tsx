@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getBoardDetailAPI } from "@/lib/api/board";
 import { useHandleAuthError } from "@/hooks/useHandleAuthError";
 import { useDeleteBoard } from "@/hooks/useDeleteBoard";
+import { useLikeBoard } from "@/hooks/useLikeBoard";
 import type { BoardDetail } from "@/types/board";
 
 interface BoardDetailPageProps {
@@ -17,10 +18,6 @@ export default function BoardDetailPage({ boardId }: BoardDetailPageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 좋아요 낙관적 업데이트
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-
   const router = useRouter();
   const withAuthError = useHandleAuthError();
   const {
@@ -29,6 +26,12 @@ export default function BoardDetailPage({ boardId }: BoardDetailPageProps) {
     showConfirm,
     setShowConfirm,
   } = useDeleteBoard();
+
+  const { isLiked, likeCount, handleLikeToggle } = useLikeBoard({
+    boardId: boardId,
+    initialIsLiked: board?.isLiked ?? false,
+    initialLikeCount: board?.likeCount ?? 0,
+  });
 
   useEffect(() => {
     (async () => {
@@ -41,25 +44,9 @@ export default function BoardDetailPage({ boardId }: BoardDetailPageProps) {
       }
 
       setBoard(response.data || null);
-
-      // 좋아요 초기값 설정
-      if (response.data) {
-        setIsLiked(response.data.isLiked);
-        setLikeCount(response.data.likeCount);
-      }
-
       setIsLoading(false);
     })();
   }, [boardId, withAuthError]);
-
-  // 좋아요 토글 핸들러
-  const handleLikeToggle = () => {
-    // 즉시 UI 변경
-    setIsLiked(!isLiked);
-    setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
-
-    console.log("좋아요 토글:", !isLiked);
-  };
 
   if (isLoading) {
     return <div className="text-center py-8">로딩 중...</div>;
