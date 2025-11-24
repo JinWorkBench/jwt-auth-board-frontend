@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       // 커스텀 그리드 (grid-cols-header)
       gridTemplateColumns: {
-        header: "1fr 1fr 1.5fr",
+        header: "1fr 1fr 1.7fr",
       },
     },
   },
